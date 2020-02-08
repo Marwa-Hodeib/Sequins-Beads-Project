@@ -32,9 +32,52 @@ const start = async () => {
     const { name } = req.query
     const result = await controller.updateContact(id,{name})
     res.json(result)
-  })
+  });
+
+  ///////////**********Admin Table*************///////////
+
+  ///////////create
+
+  app.get("/admin/create/", async (req, res) => {
+    const result = await controller.createAdmin(req.query);
+    res.json(result);
+  });
 
 
+  ////////////read
+
+  app.get("/admin", async (req, res) => {
+    const result = await controller.getAdmin();
+    res.json(result);
+  });
+
+  app.get("/admin/id/:ID", async (req, res) => {
+    const result = await controller.getAdminId(req.params.ID);
+    res.json(result);
+  });
+
+  app.get("/admin/name/:NAME", async (req, res) => {
+    const result = await controller.getAdminName(req.params.NAME);
+    res.json(result);
+  });
+
+  ////////////update
+
+  app.get("/admin/update/:ID", async (req, res) => {
+    const result = await controller.updateAdmin(req.params.ID,req.query);
+    res.json(result);
+  });
+
+
+  ///////////delete
+  app.get("/admin/delete/id/:ID", async (req, res) => {
+    const result = await controller.deleteAdminId(req.params.ID);
+    res.json(result);
+  });
+  app.get("/admin/delete/name/:NAME", async (req, res) => {
+    const result = await controller.deleteAdminName(req.params.NAME);
+    res.json(result);
+  });
 
 };
 

@@ -50,6 +50,7 @@ const initializeDB = async () => {
                 );`) */
 
   // await db.run(`insert into collection (collection_name) values ('zeinab');`)
+  //await db.run(`insert into admin (admin_user,admin_pass) values ('admin','admin');`)
 
   const getcollection = async () => {
     const rows = await db.all("select * from collection");
@@ -67,12 +68,111 @@ const initializeDB = async () => {
     const { name} = props;
     const result = await db.run(`UPDATE collection SET collectin_name=’${name}’ WHERE collection_id = ${id}`);
   }
+  //////////********* Admin **********//////////
+
+  const getAdmin = async () => {
+    try{
+    const rows = await db.all(`select * from admin`);
+    return rows
+    }catch(err){
+      throw new Error("Error connection with database")
+    }
+  }
+
+  const getAdminId = async (id) => {
+    try{
+    const rows = await db.all(`select * from admin where admin_id=${id}`);
+    if(rows.length>0)
+      return rows;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
+
+  const getAdminName= async (name) => {
+    try{
+    const rows = await db.all(`select * from admin where admin_user='${name}'`);
+    if(rows.length>0)
+      return rows;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
+  const deleteAdminId= async (id) => {
+    try{
+    const rows = await db.run(`delete from admin where admin_id=${id}`);console.log(rows);
+    if(rows.stmt.changes>0)
+      return true;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
+  const deleteAdminName= async (name) => {
+    try{
+    const rows = await db.run(`delete from admin where admin_user='${name}'`);
+    if(rows.stmt.changes>0)
+      return true;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
+  const createAdmin= async (props) => {
+    const {user,pass}=props;
+    if(user && pass){
+       try{
+        const rows = await db.run(`insert into admin (admin_user,admin_pass) values ('${user}','${pass}')`);
+        if(rows.stmt.changes>0)
+          return rows.stmt.lastID;
+        else
+          return false;
+      }catch(err){
+        throw new Error("Error conection with database")
+      } 
+    }
+    return "Enter user and pass";
+  }
+
+  const updateAdmin= async (id,props) => {
+    const {user,pass}=props;
+    let query=" ";
+    if(user && pass){
+      query=`update admin set admin_user='${user}', admin_pass='${pass}' where admin_id=${id}`;
+    }
+    else if(user && !pass)
+      query=`update admin set admin_user='${user}' where admin_id=${id}`;
+    else
+      query=`update admin set admin_pass='${pass}' where admin_id=${id}`;
+    try{
+    const rows = await db.run(query);
+    if(rows.stmt.changes>0)
+      return true;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
 
   const controller = {
     getcollection,
     getcollectionById,
     getcollectionByName,
-    updateContact
+    updateContact,
+    getAdmin,
+    getAdminId,
+    getAdminName,
+    deleteAdminId,
+    deleteAdminName,
+    createAdmin,
+    updateAdmin
 
   };
   return controller;
