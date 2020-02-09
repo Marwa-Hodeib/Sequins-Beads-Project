@@ -79,7 +79,69 @@ const start = async () => {
     res.json(result);
   });
 
+
+  ///////////**********Order Table*************///////////
+
+   ////////////Create
+
+   app.get("/order/create/",async(req,res)=>{
+    const result=await controller.createOrder(req.query);
+    res.json(result);
+  });
+
+
+  ///////////////read
+
+
+  app.get("/order", async (req, res) => {
+    const result = await controller.getOrder();
+    res.json(result);
+  });
+
+
+  app.get("/order/id/:ID", async (req, res) => {
+    const result = await controller.getOrderId(req.params.ID);
+    res.json(result);
+  });
+
+  app.get("/order/name/:NAME", async (req, res) => {
+    const result = await controller.getOrderClientName(req.params.NAME);
+    res.json(result);
+  });
+
+  app.get("/order/product/:ID", async (req, res) => {
+    const result = await controller.getOrderProductId(req.params.ID);
+    res.json(result);
+  });
+
+  app.get("/order/date/:DATE", async (req, res) => {
+    const result = await controller.getOrderDate(req.params.DATE);
+    res.json(result);
+  });
+
+    //////////Update
+
+    app.get("/order/upate/:ID",async(req,res)=>{
+      const result=await controller.updateOrder(req.params.ID,req.query);
+      res.json(result);
+    });
+
+  /////////Delete
+
+  app.get("/order/delete/id/:ID",async(req,res)=>{
+    const result=await controller.deleteOrderId(req.params.ID);
+    res.json(result);
+  });
+
+  app.get("/order/delete/client/:NAME",async(req,res)=>{
+    const result=await controller.deleteOrderClientName(req.params.NAME);
+    res.json(result);
+  });
+
 };
+
+
+
 
 app.listen(8080, () => {
   console.log("port 8080");
