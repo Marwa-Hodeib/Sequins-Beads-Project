@@ -378,9 +378,6 @@ return false;
     deleteOrderClientName,
     createOrder,
     updateOrder
-    
-
-
   };
   return controller;
 };
