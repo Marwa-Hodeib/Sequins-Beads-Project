@@ -49,7 +49,7 @@ const initializeDB = async () => {
                     REFERENCES collection (collection_id)
                 );`) */
 
-  // await db.run(`insert into collection (collection_name) values ('zeinab');`)
+   //await db.run(`insert into collection (collection_name) values ('zeinab');`)
 
   const getcollection = async () => {
     const rows = await db.all("select * from collection");
@@ -63,16 +63,66 @@ const initializeDB = async () => {
     const rows =  await db.all(`select * from collection where collection_name = '${name}'`);
     return rows;
   }
-  const updateContact = async (id, props) => {
-    const { name} = props;
-    const result = await db.run(`UPDATE collection SET collectin_name=’${name}’ WHERE collection_id = ${id}`);
+  
+  const deleteCollectionByID = async(id) =>{
+   try{ 
+const rows = await db.run(`delete from collection where collection_id=${id}`);
+if(rows.stmt.changes>0){
+  return true;
+}
+else 
+return false;
+   }catch(err){
+     throw new Error("not found"+err)
+   }
   }
+
+  const deleteCollectionByName = async (name) =>{
+    try{
+      const rows = await db.run (`delete from collection where collection_name='${name}'`);
+      if(rows.stmt.changes>0){
+        return true;
+      }
+      else 
+      return false;}catch{
+      throw new Error("not found");}
+    }
+
+
+    const createCollectionByID = async (props) =>{
+      const {name}=props;
+      try{
+      const rows = await db.run (`insert into collection (collection_name) values ('${name}')`);
+      return rows.stmt.lastID;
+      }catch(err){
+        throw new Error("no connection to database");
+      }
+    }
+  
+
+    const updateCollection = async (id,props) =>{
+      const {name}=props;
+      if(name){
+      try{
+      const rows = await db.run (`update collection set collection_name='${name}' where collection_id=${id}`);
+      return rows.stmt.lastID;
+      
+      }catch(err){
+        throw new Error("no connection to database");
+      }
+    }
+    }
 
   const controller = {
     getcollection,
     getcollectionById,
     getcollectionByName,
-    updateContact
+    deleteCollectionByID,
+    deleteCollectionByName,
+    createCollectionByID,
+    updateCollection
+
+    
 
   };
   return controller;
