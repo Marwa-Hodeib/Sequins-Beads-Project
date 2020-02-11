@@ -8,24 +8,58 @@ const start = async () => {
   const controller = await initializeDB();
 
   app.get("/", (req, res) => {
-    // const result =await controller.getcollection();
-    // res.send("result");});
     res.send("Welcome!");
   });
-  // }(node:11651) UnhandledPromiseRejectionWarning: TypeError: (0 , _db.default) is not a function
 
-  app.get("/all", async (req, res) => {
+
+  ///////////**********Collection Table**********//////////////
+
+  //////////////Read
+
+  app.get("/collection", async (req, res) => {
     const result = await controller.getcollection();
     res.json(result);
   });
-  app.get("/all/collection/:id", async (req, res) => {
+  app.get("/collection/ID/:id", async (req, res) => {
     const result = await controller.getcollectionById(req.params.id);
     res.json(result);
   });
-  app.get("/all/collection/name/:name", async (req, res)=> {
+  app.get("/collection/name/:name", async (req, res)=> {
     const result = await controller.getcollectionByName(req.params.name);
     res.json(result);
   });
+
+  //////////////////Delete
+
+
+app.get("/collection/delete/id/:ID",async(req,res)=>{
+  const result = await
+  controller.deleteCollectionByID(req.params.ID);
+  res.json(result);
+})
+  
+app.get("/collection/delete/name/:name", async (req,res)=> {
+  const result = await
+  controller.deleteCollectionByName (req.params.name);
+  res.json(result);
+})
+
+
+////////Create
+
+app.get("/collection/create/",async (req,res)=>{
+  const result = await 
+  controller.createCollectionByID(req.query);
+  res.json(result);
+});
+
+///////////update
+
+app.get("/collection/update/:ID",async (req,res)=>{
+  const result = await 
+  controller.updateCollection(req.params.ID,req.query);
+  res.json(result);
+});
 
   app.get('/collection/update/:id', async (req, res) => {
     const { id } = req.params

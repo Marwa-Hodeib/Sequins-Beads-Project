@@ -49,6 +49,7 @@ const initializeDB = async () => {
                     REFERENCES collection (collection_id)
                 );`) */
 
+   //await db.run(`insert into collection (collection_name) values ('zeinab');`)
   // await db.run(`insert into collection (collection_name) values ('zeinab');`)
   //await db.run(`insert into admin (admin_user,admin_pass) values ('admin','admin');`)
   //await db.run(`insert INTO category (category_name) VALUES('summer')`)
@@ -73,9 +74,18 @@ VALUES ('2-2-2020', 2, 20000, 1, 'joe', 'jnjjknn'); `) */
     const rows =  await db.all(`select * from collection where collection_name = '${name}'`);
     return rows;
   }
-  const updateContact = async (id, props) => {
-    const { name} = props;
-    const result = await db.run(`UPDATE collection SET collectin_name=’${name}’ WHERE collection_id = ${id}`);
+  
+  const deleteCollectionByID = async(id) =>{
+   try{ 
+const rows = await db.run(`delete from collection where collection_id=${id}`);
+if(rows.stmt.changes>0){
+  return true;
+}
+else 
+return false;
+   }catch(err){
+     throw new Error("not found"+err)
+   }
   }
   //////////********* Admin **********//////////
 
@@ -175,10 +185,84 @@ VALUES ('2-2-2020', 2, 20000, 1, 'joe', 'jnjjknn'); `) */
 
    //////////********* Order **********//////////
 
+  const deleteCollectionByName = async (name) =>{
+    try{
+      const rows = await db.run (`delete from collection where collection_name='${name}'`);
+      if(rows.stmt.changes>0){
+        return true;
+      }
+      else 
+      return false;}catch{
+      throw new Error("not found");}
+    }
+
+
+    const createCollectionByID = async (props) =>{
+      const {name}=props;
+      try{
+      const rows = await db.run (`insert into collection (collection_name) values ('${name}')`);
+      return rows.stmt.lastID;
+      }catch(err){
+        throw new Error("no connection to database");
+      }
+    }
+  
+
+    const updateCollection = async (id,props) =>{
+      const {name}=props;
+      if(name){
+      try{
+      const rows = await db.run (`update collection set collection_name='${name}' where collection_id=${id}`);
+      return rows.stmt.lastID;
+      
+      }catch(err){
+        throw new Error("no connection to database");
+      }
+    }
+    }
+
+  const updateOrder= async (id,props) => {
+    const {quantity,productID,clientName,area}=props;
+    let query=" ";
+    if(quantity && productID && clientName && area){
+      const result=await db.all(`select product_price from product where product_id=${productID}`);
+      const amount=result[0].product_price*quantity;
+      query=`update 'order' set order_quantity=${quantity} , product_product_id=${productID} , client_name='${clientName}' ,order_amount=${amount} , area='${area}' where order_id=${id}`;
+    }
+    else if(quantity && productID && clientName && !area){
+      const result=await db.all(`select product_price from product where product_id=${productID}`);
+      const amount=result[0].product_price*quantity;
+      query=`update 'order' set order_quantity=${quantity} , product_product_id=${productID} , client_name='${clientName}' ,order_amount=${amount} where order_id=${id}`;
+    }
+    else if(quantity && productID && !clientName && !area){
+      const result=await db.all(`select product_price from product where product_id=${productID}`);
+      const amount=result[0].product_price*quantity;
+      query=`update 'order' set order_quantity=${quantity} , product_product_id=${productID} ,order_amount=${amount}`;
+    }
+    else{
+      const result=await db.all(`select product_price from product where product_id=${id}`);
+      const amount=result[0].product_price*quantity;
+      query=`update 'order' set order_quantity=${quantity} ,order_amount=${amount} where order_id=${id}`;
+    }
+     try{
+    const rows = await db.run(query);
+    if(rows.stmt.changes>0)
+      return true;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }  
+  }
+  
   const controller = {
     getcollection,
     getcollectionById,
     getcollectionByName,
+    deleteCollectionByID,
+    deleteCollectionByName,
+    createCollectionByID,
+    updateCollection,    
     updateContact,
     getAdmin,
     getAdminId,
@@ -186,9 +270,17 @@ VALUES ('2-2-2020', 2, 20000, 1, 'joe', 'jnjjknn'); `) */
     deleteAdminId,
     deleteAdminName,
     createAdmin,
-    updateAdmin
-
-  };
+    updateAdmin,
+    updateAdmin,
+    getOrder,
+    getOrderId,
+    getOrderClientName,
+    getOrderProductId,
+    getOrderDate,
+    deleteOrderId,
+    deleteOrderClientName,
+    createOrder,
+    updateOrder}
   return controller;
 };
 export default initializeDB ;
