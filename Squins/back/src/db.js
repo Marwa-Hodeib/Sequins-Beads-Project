@@ -263,7 +263,7 @@ return false;
     deleteCollectionByName,
     createCollectionByID,
     updateCollection,    
-    updateContact,
+   // updateContact,
     getAdmin,
     getAdminId,
     getAdminName,
@@ -272,15 +272,15 @@ return false;
     createAdmin,
     updateAdmin,
     updateAdmin,
-    getOrder,
-    getOrderId,
-    getOrderClientName,
-    getOrderProductId,
-    getOrderDate,
+    //getOrder,
+    //getOrderId,
+   // getOrderClientName,
+    //getOrderProductId,
+   /*  getOrderDate,
     deleteOrderId,
     deleteOrderClientName,
     createOrder,
-    updateOrder}
+    updateOrder */}
   return controller;
 };
 export default initializeDB ;

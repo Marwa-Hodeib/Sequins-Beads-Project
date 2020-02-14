@@ -1,12 +1,12 @@
 import React from 'react';
-import collection from "./components/collection/collection";
 import './App.css';
+import Navbar from "./components/navbar/navbar";
+
 
 function App() {
   return (
     <div className="App">
-      <collection/>
- 
+      <Navbar/>
     </div>
   );
 }
