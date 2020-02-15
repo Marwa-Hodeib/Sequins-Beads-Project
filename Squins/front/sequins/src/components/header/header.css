@@ -1,0 +1,10 @@
+.header_div{
+    background-color: rgb(197, 193, 193);
+    display:flex;
+    justify-content: space-evenly;
+    padding-top:10px;
+    padding-bottom: 10px;
+}
+.header_navlink{
+    color:black;
+}

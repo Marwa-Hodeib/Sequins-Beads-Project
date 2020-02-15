@@ -32,7 +32,8 @@ class Slider extends Component{
                 </Carousel.Item>
              
            )}
-        </Carousel>:<Carousel interval={3000}>
+        </Carousel>:
+        <Carousel interval={3000} pauseOnHover={false} touch={false} indicators={true} wrap={true}>
 
 {this.state.list2.map((task, index) => 
          <Carousel.Item>
