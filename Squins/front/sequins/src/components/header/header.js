@@ -9,13 +9,15 @@ function Header(){
     return(
     <>
     <div className="header_div">
-      <NavLink to="/" className="header_navlink">Home</NavLink>
-      <NavLink to="/gallery" className="header_navlink">Gallery</NavLink>
-      <NavLink to="/about" className="header_navlink">About</NavLink>
-      <NavLink to="/contact" className="header_navlink">Contact us</NavLink>
+      <div className="header_div_link">
+      <a><span><NavLink to="/" className="header_navlink">Home</NavLink></span></a>
+      <a><span><NavLink to="/gallery" className="header_navlink">Gallery</NavLink></span></a>
+      <a><span><NavLink to="/about" className="header_navlink">About</NavLink></span></a>
+      <a><span><NavLink to="/contact" className="header_navlink">Contact us</NavLink></span></a>
+      </div>
       <Form inline>
-      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-success">Search</Button>
+      <FormControl type="text" placeholder="Search" />
+      <Button variant="outline-success" className="header_button">Search</Button>
     </Form>
     </div>
     </>
