@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from 'react';
 import './App.css';
 import Header from "./components/header/header";
 import Home from "./pages/home/home";
@@ -8,25 +7,14 @@ import Gallery from "./pages/gallery/gallery";
 import Contact from "./pages/contact_us /contact_us";
 import Slider from "./components/Slider/slider";
 
-class App extends Component {
-  render() {
+function App() {
   return (
     <div className="App">
      
-      <BrowserRouter>
-        <div>
-            <Switch>
-             <Route path="/" component={Home} exact/>
-             <Route path="/about" component={About}/>
-             <Route path="/contact" component={Contact}/>
-             <Route path="/gallery" component={Gallery}/>
-           </Switch>
-        </div> 
-      </BrowserRouter>
-      
+      <Nav/>
+      <Caro/>
     </div>
   );
-}
 }
 
 export default App;
