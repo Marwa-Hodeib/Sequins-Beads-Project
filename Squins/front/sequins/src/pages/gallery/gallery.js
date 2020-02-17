@@ -15,3 +15,11 @@ export class gallery extends React.Component {
   }
 }
 export default gallery;
+export default function Gallery(){
+    return (
+      <>
+      <p>Gallery</p>
+     
+      </>
+    );
+  }
