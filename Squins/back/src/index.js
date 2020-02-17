@@ -24,7 +24,7 @@ const start = async () => {
     const result = await controller.getcollectionById(req.params.id);
     res.json(result);
   });
-  app.get("/collection/name/:name", async (req, res)=> {
+  app.get("/collection/name/:name", async (req, res) => {
     const result = await controller.getcollectionByName(req.params.name);
     res.json(result);
   });
@@ -32,41 +32,96 @@ const start = async () => {
   //////////////////Delete
 
 
-app.get("/collection/delete/id/:ID",async(req,res)=>{
-  const result = await
-  controller.deleteCollectionByID(req.params.ID);
-  res.json(result);
-})
-  
-app.get("/collection/delete/name/:name", async (req,res)=> {
-  const result = await
-  controller.deleteCollectionByName (req.params.name);
-  res.json(result);
-})
+  app.get("/collection/delete/id/:ID", async (req, res) => {
+    const result = await
+    controller.deleteCollectionByID(req.params.ID);
+    res.json(result);
+  })
+
+  app.get("/collection/delete/name/:name", async (req, res) => {
+    const result = await
+    controller.deleteCollectionByName(req.params.name);
+    res.json(result);
+  })
 
 
-////////Create
+  ////////Create
 
-app.get("/collection/create/",async (req,res)=>{
-  const result = await 
-  controller.createCollectionByID(req.query);
-  res.json(result);
-});
+  app.get("/collection/create/", async (req, res) => {
+    const result = await
+    controller.createCollectionByID(req.query);
+    res.json(result);
+  });
 
-///////////update
+  ///////////update
 
-app.get("/collection/update/:ID",async (req,res)=>{
-  const result = await 
-  controller.updateCollection(req.params.ID,req.query);
-  res.json(result);
-});
+  app.get("/collection/update/:ID", async (req, res) => {
+    const result = await
+    controller.updateCollection(req.params.ID, req.query);
+    res.json(result);
+  });
 
   app.get('/collection/update/:id', async (req, res) => {
-    const { id } = req.params
-    const { name } = req.query
-    const result = await controller.updateContact(id,{name})
+    const {
+      id
+    } = req.params
+    const {
+      name
+    } = req.query
+    const result = await controller.updateContact(id, {
+      name
+    })
     res.json(result)
   });
+  ///////////**********Category Table**********//////////////
+
+  //////////////Read
+
+  app.get("/category", async (req, res) => {
+    const result = await controller.getCategory();
+    res.json(result);
+  });
+  app.get("/category/ID/:id", async (req, res) => {
+    const result = await controller.getCategoryById(req.params.id);
+    res.json(result);
+  });
+  app.get("/category/name/:name", async (req, res) => {
+    const result = await controller.getCategoryByName(req.params.name);
+    res.json(result);
+  });
+
+  //////////////////Delete
+
+
+  app.get("/category/delete/id/:ID", async (req, res) => {
+    const result = await
+    controller.deleteCategoryByID(req.params.ID);
+    res.json(result);
+  })
+
+  app.get("/category/delete/name/:name", async (req, res) => {
+    const result = await
+    controller.deleteCategoryByName(req.params.name);
+    res.json(result);
+  })
+
+
+  ////////Create
+
+  app.get("/category/create/", async (req, res) => {
+    const result = await
+    controller.createCategoryByID(req.query);
+    res.json(result);
+  });
+
+  ///////////update
+
+  app.get("/category/update/:ID", async (req, res) => {
+    const result = await
+    controller.updateCategory(req.params.ID, req.query);
+    res.json(result);
+  });
+
 
   ///////////**********Admin Table*************///////////
 
@@ -98,7 +153,7 @@ app.get("/collection/update/:ID",async (req,res)=>{
   ////////////update
 
   app.get("/admin/update/:ID", async (req, res) => {
-    const result = await controller.updateAdmin(req.params.ID,req.query);
+    const result = await controller.updateAdmin(req.params.ID, req.query);
     res.json(result);
   });
 
@@ -116,10 +171,10 @@ app.get("/collection/update/:ID",async (req,res)=>{
 
   ///////////**********Order Table*************///////////
 
-   ////////////Create
+  ////////////Create
 
-   app.get("/order/create/",async(req,res)=>{
-    const result=await controller.createOrder(req.query);
+  app.get("/order/create/", async (req, res) => {
+    const result = await controller.createOrder(req.query);
     res.json(result);
   });
 
@@ -153,22 +208,22 @@ app.get("/collection/update/:ID",async (req,res)=>{
     res.json(result);
   });
 
-    //////////Update
+  //////////Update
 
-    app.get("/order/upate/:ID",async(req,res)=>{
-      const result=await controller.updateOrder(req.params.ID,req.query);
-      res.json(result);
-    });
-
-  /////////Delete
-
-  app.get("/order/delete/id/:ID",async(req,res)=>{
-    const result=await controller.deleteOrderId(req.params.ID);
+  app.get("/order/upate/:ID", async (req, res) => {
+    const result = await controller.updateOrder(req.params.ID, req.query);
     res.json(result);
   });
 
-  app.get("/order/delete/client/:NAME",async(req,res)=>{
-    const result=await controller.deleteOrderClientName(req.params.NAME);
+  /////////Delete
+
+  app.get("/order/delete/id/:ID", async (req, res) => {
+    const result = await controller.deleteOrderId(req.params.ID);
+    res.json(result);
+  });
+
+  app.get("/order/delete/client/:NAME", async (req, res) => {
+    const result = await controller.deleteOrderClientName(req.params.NAME);
     res.json(result);
   });
 
