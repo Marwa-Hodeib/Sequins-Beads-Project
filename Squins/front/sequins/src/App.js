@@ -6,6 +6,7 @@ import Home from "./pages/home/home";
 import About from "./pages/about/about";
 import Gallery from "./pages/gallery/gallery";
 import Contact from "./pages/contact_us /contact_us";
+import Slider from "./components/Slider/slider";
 
 class App extends Component {
   render() {

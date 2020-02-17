@@ -232,9 +232,18 @@ app.get("/collection/update/:ID",async (req,res,next)=>{
     }
   });
 
+  app.get("/order/area/:AREA", async (req, res,next) => {
+    try{
+    const result = await controller.getOrderArea(req.params.AREA);
+    res.json(result);
+    }catch(err){
+      next(err);
+    }
+  });
+
     //////////Update
 
-    app.get("/order/upate/:ID",async(req,res,next)=>{
+    app.get("/order/update/:ID",async(req,res,next)=>{
       try{
       const result=await controller.updateOrder(req.params.ID,req.query);
       res.json(result);

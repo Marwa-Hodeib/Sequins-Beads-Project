@@ -412,6 +412,18 @@ const initializeDB = async () => {
     }
   }
 
+  const getOrderArea= async (area) => {
+    try{
+    const rows = await db.all(`select * from orders where area='${area}'`);
+    if(rows.length>0)
+      return rows;
+    else
+      return false;
+    }catch(err){
+      throw new Error("Error conection with database")
+    }
+  }
+
   const deleteOrderId= async (id) => {
     id=parseInt(id);
     if(!isNaN(id)){
@@ -444,15 +456,15 @@ const initializeDB = async () => {
 
 
   const createOrder= async (props) => {
-    const {date,quantity,amount,productID,clientName,area}=props;
+    let {date,quantity,amount,productID,clientName,area}=props;
     quantity=parseInt(quantity);
     amount=parseInt(amount);
     productID=parseInt(productID);
     if(date && quantity && amount && productID && clientName && area){
       if(!isNaN(amount) && !isNaN(quantity) && !isNaN(productID)){
         try{
-          const rows = await db.run(`INSERT INTO 'order'
-          ("order_date", "order_quantity", "order_amount", "product_product_id", "client_name", "area")
+          const rows = await db.run(`INSERT INTO orders
+          ("orders_date", "orders_quantity", "orders_amount", "product_product_id", "client_name", "area")
           VALUES ('${date}',${quantity}, ${amount}, ${productID}, '${clientName}', '${area}')`);
           if(rows.stmt.changes>0)
             return rows.stmt.lastID;
@@ -469,42 +481,94 @@ const initializeDB = async () => {
     return "Enter all necessary data!!";
   }
 
-  const updateOrder= async (id,props) => {
-    const {quantity,productID,clientName,area}=props;
+  const updateOrder= async (id,props) => {console.log("zzsss");
+    let {quantity,productID,clientName,area}=props;
     let query=" ";
     quantity=parseInt(quantity);
     productID=parseInt(productID);
     id=parseInt(id);
     if(!isNaN(id)){
-        if(productID && quantity && !isNaN(productID) && !isNaN(quantity)){
-            if(quantity && productID && clientName && area){
+              if(clientName && area && productID && quantity && !isNaN(productID) && !isNaN(quantity)){
                 const result=await db.all(`select product_price from product where product_id=${productID}`);
                 const amount=result[0].product_price*quantity;
                 query=`update orders set orders_quantity=${quantity} , product_product_id=${productID} , client_name='${clientName}' ,orders_amount=${amount} , area='${area}' where orders_id=${id}`;
-            }
-            else if(quantity && productID && clientName && !area){
+              }
+               else if(quantity && productID && clientName && !area && !isNaN(productID) && !isNaN(quantity)){
                 const result=await db.all(`select product_price from product where product_id=${productID}`);
                 const amount=result[0].product_price*quantity;
                 query=`update orders set orders_quantity=${quantity} ,product_product_id=${productID} ,client_name='${clientName}' ,orders_amount=${amount} where orders_id=${id}`;
               }
-              else if(quantity && productID && !clientName && !area){
+              else if(quantity && productID && !clientName && !area && !isNaN(productID) && !isNaN(quantity)){
                 const result=await db.all(`select product_price from product where product_id=${productID}`);
                 const amount=result[0].product_price*quantity;
-                query=`update orders set orders_quantity=${quantity} , product_product_id=${productID} ,orders_amount=${amount}`;
+                query=`update orders set orders_quantity=${quantity} , product_product_id=${productID} ,orders_amount=${amount} where orders_id=${id}`;
               }
-        }
-        else if(productID && isNaN(productID)){
-            const result=await db.all(`select product_price from product where product_id=${productID}`);
-            const amount=result[0].product_price*quantity;
-            query=`update orders set orders_amount=${amount} where orders_id=${id}`;
-        }
-        else if(quantity && isNaN(quantity)){
-            const result=await db.all(`select product_price from product where product_id=${productID}`);
-            const amount=result[0].product_price*quantity;
-            query=`update orders set orders_amount=${amount}, orders_quantity=${quantity} where orders_id=${id}`;
-        }
-        else
-        throw new Error("quantity and product_id both must be number");
+              else if(quantity && productID && !clientName && area && !isNaN(productID) && !isNaN(quantity)){
+                const result=await db.all(`select product_price from product where product_id=${productID}`);
+                const amount=result[0].product_price*quantity;
+                query=`update orders set orders_quantity=${quantity} , product_product_id=${productID} ,orders_amount=${amount}, area=${area} where orders_id=${id}`;
+              }
+              ///////////////////////////////
+              else if(clientName && area && productID && !quantity && !isNaN(productID) && !isNaN(quantity)){
+                const result=await db.all(`select product_price from product where product_id=${productID}`);
+                const prev_quantity=await db.all(`select orders_quantity from orders where orders_id=${id}`);
+                const amount=result[0].product_price*prev_quantity;
+                query=`update orders set product_product_id=${productID} , client_name='${clientName}' ,orders_amount=${amount} , area='${area}' where orders_id=${id}`;
+              }
+               else if(!quantity && productID && clientName && !area && !isNaN(productID) && !isNaN(quantity)){
+                const result=await db.all(`select product_price from product where product_id=${productID}`);
+                const prev_quantity=await db.all(`select orders_quantity from orders where orders_id=${id}`);
+                const amount=result[0].product_price*prev_quantity;
+                query=`update orders set orders_quantity=${quantity} ,product_product_id=${productID} ,client_name='${clientName}' ,orders_amount=${amount} where orders_id=${id}`;
+              }
+              else if(!quantity && productID && !clientName && !area && !isNaN(productID) && !isNaN(quantity)){
+                const result=await db.all(`select product_price from product where product_id=${productID}`);
+                const prev_quantity=await db.all(`select orders_quantity from orders where orders_id=${id}`);
+                const amount=result[0].product_price*prev_quantity;
+                query=`update orders set orders_quantity=${quantity} , product_product_id=${productID} ,orders_amount=${amount} where orders_id=${id}`;
+              }
+              else if(!quantity && productID && !clientName && area && !isNaN(productID)){console.log(productID)
+                const result=await db.all(`select product_price from product where product_id=${productID}`);console.log(result[0].product_quantity);
+                const prev_quantity=await db.all(`select orders_quantity from orders where orders_id=${id}`);
+                const amount=result[0].product_price*prev_quantity;
+                query=`update orders set  product_product_id=${productID} ,orders_amount=${amount}, area='${area}' where orders_id=${id}`;
+              }
+              ///////////////////////////////
+              if(clientName && area && !productID && quantity && !isNaN(quantity)){
+                const product_id=await db.all(`select product_product_id from orders where orders_id=${id}`);
+                const result=await db.all(`select product_price from product where product_id=${product_id[0].product_product_id}`);
+                const amount=result[0].product_price*quantity;
+                query=`update orders set orders_quantity=${quantity} ,client_name='${clientName}' ,orders_amount=${amount}, area='${area}' where orders_id=${id}`;
+              }
+               else if(quantity && !productID && clientName && !area && !isNaN(quantity)){
+                const product_id=await db.all(`select product_product_id from orders where orders_id=${id}`);
+                const result=await db.all(`select product_price from product where product_id=${product_id[0].product_product_id}`);
+                const amount=result[0].product_price*quantity;
+                query=`update orders set orders_quantity=${quantity} ,client_name='${clientName}' ,orders_amount=${amount} where orders_id=${id}`;console.log(query);console.log(typeof(quantity))
+              }
+              else if(quantity && !productID && !clientName && !area && !isNaN(quantity)){
+                const product_id=await db.all(`select product_product_id from orders where orders_id=${id}`);
+                const result=await db.all(`select product_price from product where product_id=${product_id[0].product_product_id}`);
+                const amount=result[0].product_price*quantity;
+                query=`update orders set orders_quantity=${quantity} ,orders_amount=${amount} where orders_id=${id}`;
+              }
+              else if(quantity && !productID && !clientName && area  && !isNaN(quantity)){
+                const product_id=await db.all(`select product_product_id from orders where orders_id=${id}`);
+                const result=await db.all(`select product_price from product where product_id=${product_id[0].product_product_id}`);
+                const amount=result[0].product_price*quantity;
+                query=`update orders set orders_quantity=${quantity} ,orders_amount=${amount}, area='${area}' where orders_id=${id}`;
+              }
+              ///////////////////////////////
+              else if(clientName && area && !productID && !quantity){
+                query=`update orders set client_name='${clientName}' , area='${area}' where orders_id=${id}`;
+              }
+               else if(!quantity && !productID && clientName && !area ){
+                query=`update orders set client_name='${clientName}' where orders_id=${id}`;
+              }
+              else if(!quantity && !productID && !clientName && area){
+                query=`update orders set area='${area}' where orders_id=${id}`;
+              }
+              //////////////////////////////
         try{
             const rows = await db.run(query);
             if(rows.stmt.changes>0)
@@ -659,6 +723,7 @@ const initializeDB = async () => {
     getOrderId,
     getOrderClientName,
     getOrderProductId,
+    getOrderArea,
     getOrderDate,
     deleteOrderId,
     deleteOrderClientName,
