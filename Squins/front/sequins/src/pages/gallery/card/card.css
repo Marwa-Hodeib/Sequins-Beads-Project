@@ -1,0 +1,14 @@
+.card {
+  height: 200px;
+  width: 150px;
+}
+img {
+  height: 80%;
+  width: 100%;
+}
+img:hover {
+  transform: scale(1.5);
+}
+caption {
+  margin: auto;
+}
